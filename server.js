@@ -2,12 +2,13 @@ const http = require('http'); // Get HTTP Module
 const url = require('url'); // Get URL Module
 const fs = require('fs'); // Get File System Module
 const text = require('./lang/en/en.js'); // Get user texts module
+const path = require('path'); // Handle file paths
 
 const SUCCESS = 200; // Successful Status Code
 const NOTFOUND = 404; // Not Found Status Code
 const MYPORT = 8888; // My Port to use locally 
 const port = process.env.PORT || MYPORT; // port variable is determined by Azure / GitHubs port or my port
-
+const AZUREFILENAME = path.join('D:/home', text.MYFILENAME);
 // Server Class
 // This class handles the server requests
 class Server
@@ -18,12 +19,12 @@ class Server
         let q = url.parse(req.url, true); // get the url information as string
         if (!q.query['text']) // If there is no ?text= in the url then read file
         {
-            fs.readFile(text.MYFILENAME, function(err, data) { // try to read file
+            fs.readFile(AZUREFILENAME, function(err, data) { // try to read file
                 let statusCode = SUCCESS; // automatically set status code
                 let endResult = ""; // automatically set end result
 
                 if (err) { // if error create file with blank data
-                    MyFile.writeToFile(text.MYFILENAME, ""); // create file
+                    MyFile.writeToFile(AZUREFILENAME, ""); // create file
                     statusCode = NOTFOUND; // set status code to not found
                     endResult = `${q.pathname} ${text.NOTFOUNDMESSAGE}`; // set end result to not found message 
                 }
