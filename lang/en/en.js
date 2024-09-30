@@ -1,4 +1,4 @@
-const MYFILENAME = 'file.txt'; // File Name and File Path
+const MYFILENAME = 'C:\\home\\site\\wwwroot\\file.txt'; // File Name and File Path
 const NOTFOUNDMESSAGE = "404 Not Found!"; // Not Found Message
 const NEWLINE = "<br>"; // New Line tag
 
