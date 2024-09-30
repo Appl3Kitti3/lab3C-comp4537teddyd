@@ -58,7 +58,7 @@ class MyFile
     {
         // append the data to the file
         fs.appendFile(filename, data, function (err) {
-            if (err) throw err;
+            console.log("AAAAAAAAAA");
         });
     }
 }
