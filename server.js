@@ -12,26 +12,18 @@ const port = process.env.PORT || MYPORT; // port variable is determined by Azure
 // This class handles the server requests
 class Server
 {
-    constructor()
-    {
-        this.thing = "";
-    }
-
     // Handles whenever the url is called
     handleRequest(req, res)
     {
         let q = url.parse(req.url, true); // get the url information as string
-        if (q.pathname.includes("file.txt"))
-            this.thing = "." + q.pathname;
-        console.log(this.thing);
         if (!q.query['text']) // If there is no ?text= in the url then read file
         {
-            fs.readFile(this.thing, function(err, data) { // try to read file
+            fs.readFile(text.MYFILENAME, function(err, data) { // try to read file
                 let statusCode = SUCCESS; // automatically set status code
                 let endResult = ""; // automatically set end result
 
                 if (err) { // if error create file with blank data
-                    MyFile.writeToFile(this.thing, ""); // create file
+                    MyFile.writeToFile(text.MYFILENAME, ""); // create file
                     statusCode = NOTFOUND; // set status code to not found
                     endResult = `${q.pathname} ${text.NOTFOUNDMESSAGE}`; // set end result to not found message 
                 }
@@ -44,7 +36,7 @@ class Server
         }
         else
         {
-            MyFile.writeToFile(this.thing, `${q.query['text']}${text.NEWLINE}`); // append the text to the file
+            MyFile.writeToFile(text.MYFILENAME, `${q.query['text']}${text.NEWLINE}`); // append the text to the file
             res.end(); // send the response
         }
         
