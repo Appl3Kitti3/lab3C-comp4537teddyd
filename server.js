@@ -2,7 +2,6 @@ const http = require('http'); // Get HTTP Module
 const url = require('url'); // Get URL Module
 const fs = require('fs'); // Get File System Module
 const text = require('./lang/en/en.js'); // Get user texts module
-const path = require('path'); // Handle file paths
 
 const SUCCESS = 200; // Successful Status Code
 const NOTFOUND = 404; // Not Found Status Code
@@ -13,22 +12,24 @@ const port = process.env.PORT || MYPORT; // port variable is determined by Azure
 // This class handles the server requests
 class Server
 {
+    constructor()
+    {
+        this.thing = "";
+    }
+
     // Handles whenever the url is called
     handleRequest(req, res)
     {
         let q = url.parse(req.url, true); // get the url information as string
-        console.log(q.pathname); // log the pathname to the console 
-        localStorage.setItem("Thing", q.pathname);
+        this.thing = "." + q.pathname;
         if (!q.query['text']) // If there is no ?text= in the url then read file
         {
-            const fileName = "." + q.pathname;
-            localStorage.setItem("path", fileName);
-            fs.readFile(fileName, function(err, data) { // try to read file
+            fs.readFile(this.thing, function(err, data) { // try to read file
                 let statusCode = SUCCESS; // automatically set status code
                 let endResult = ""; // automatically set end result
 
                 if (err) { // if error create file with blank data
-                    MyFile.writeToFile(fileName, ""); // create file
+                    MyFile.writeToFile(this.thing, ""); // create file
                     statusCode = NOTFOUND; // set status code to not found
                     endResult = `${q.pathname} ${text.NOTFOUNDMESSAGE}`; // set end result to not found message 
                 }
@@ -41,7 +42,7 @@ class Server
         }
         else
         {
-            MyFile.writeToFile(localStorage.getItem("path"), `${q.query['text']}${text.NEWLINE}`); // append the text to the file
+            MyFile.writeToFile(this.thing, `${q.query['text']}${text.NEWLINE}`); // append the text to the file
             res.end(); // send the response
         }
         
@@ -62,6 +63,7 @@ class MyFile
     {
         // append the data to the file
         fs.appendFile(filename, data, function (err) {
+            if (err) throw err;
         });
     }
 }
