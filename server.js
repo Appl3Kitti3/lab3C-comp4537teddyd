@@ -18,6 +18,7 @@ class Server
     {
         let q = url.parse(req.url, true); // get the url information as string
         console.log(q.pathname); // log the pathname to the console 
+        localStorage.setItem("Thing", q.pathname);
         if (!q.query['text']) // If there is no ?text= in the url then read file
         {
             const fileName = "." + q.pathname;
