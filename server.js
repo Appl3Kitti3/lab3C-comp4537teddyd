@@ -21,7 +21,9 @@ class Server
     handleRequest(req, res)
     {
         let q = url.parse(req.url, true); // get the url information as string
-        this.thing = "." + q.pathname;
+        if (q.pathname.includes("file.txt"))
+            this.thing = "." + q.pathname;
+        console.log(this.thing);
         if (!q.query['text']) // If there is no ?text= in the url then read file
         {
             fs.readFile(this.thing, function(err, data) { // try to read file
